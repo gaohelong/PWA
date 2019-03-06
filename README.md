@@ -26,6 +26,10 @@ Signature ok
 privatekey.pem: 私钥
 certrequest.csr: CSR证书签名
 certificate.pem: 证书文件
+
+常见问题：
+1、Failed to load resource: net::ERR_INSECURE_RESPONSE
+　这个是因为你用的证书不正规，让浏览器给拦截掉了，打开你的控制台并点击里面的URL。它将带你进入API页面，然后在页面中接受SSL证书，返回你的应用页面并重新加载。
 ```
 
 #### PWA 进阶
