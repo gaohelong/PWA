@@ -3,6 +3,7 @@ const views = require('koa-views')
 const static = require('koa-static');
 const router = require('koa-router')()
 const https = require('https')
+const http = require('http')
 const fs = require('fs')
 
 const app = new Koa()
@@ -28,6 +29,13 @@ app.use(async (ctx, next) => {
 })
 
 router.get('/', async (ctx) => {
+  let title = 'PWA Dev'
+  await ctx.render('pwa', {
+    title
+  })
+})
+
+router.get('/ejs', async (ctx) => {
   let title = '你好ejs'
   let list = ['china', 'like', 'love', 'hi']
   let content = '<h2>这是一个h2</h2>'
@@ -44,3 +52,4 @@ app.use(router.routes())
 app.use(router.allowedMethods())
 
 https.createServer(options, app.callback()).listen(3001)
+// http.createServer(app.callback()).listen(3001) // docker时不能使用https启动

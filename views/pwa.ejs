@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="manifest" href="./manifest.json">
+  </head>
+  <body>
+    <h2><%=title%></h2>
+  </body>
+</html>
+<script>
+  window.addEventListener('load', function() {
+    console.log('load')
+    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' && window.location.pathname === '/')) {
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+
+      }).catch(function(err) {
+
+      })
+    }
+  })
+</script>

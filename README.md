@@ -94,3 +94,22 @@ if ('serviceWorker' in navigator) {
 
 此时，SW 会检测你制定文件的缓存问题，如果，已经都缓存了，那么 OK，SW 安装成功。如果查到文件没有缓存，则会发送请求去获取，并且会带上 cache-bust 的 query string，来表示缓存的版本问题。当然，这只针对于第一次加载的情况。当所有的资源都已经下载成功，那么恭喜你可以进行下一步了。大家可以参考一下 google demo。 这里，我简单说一下上面的过程，首先 event.waitUntil 你可以理解为 new Promise，它接受的实际参数只能是一个 promise，因为,caches 和 cache.addAll 返回的都是 Promise，这里就是一个串行的异步加载，当所有加载都成功时，那么 SW 就可以下一步。另外，event.waitUntil 还有另外一个重要好处，它可以用来延长一个事件作用的时间，这里特别针对于我们 SW 来说，比如我们使用 caches.open 是用来打开指定的缓存，但开启的时候，并不是一下就能调用成功，也有可能有一定延迟，由于系统会随时睡眠 SW，所以，为了防止执行中断，就需要使用 event.waitUntil 进行捕获。另外，event.waitUntil 会监听所有的异步 promise，如果其中一个 promise 是 reject 状态，那么该次 event 是失败的。这就导致，我们的 SW 开启失败。
 ```
+##### 不稳定加载
+```javascript
+不过，如果其中一个文件下载失败的话，那么这次你的 SW 启动就告吹了，即，如果其中有一个 Promise 是使用 reject 的话，那就代表着–您这次启动是 GG 的。那，有没有其他办法在保证一定稳定性的前提下，去加载比较大的文件呢？ 有的，那你别返回 cache.addAll 就ok了。什么个意思呢？ 就这样：
+  self.addEventListener('install', function(event) {
+    event.waitUntil(
+      caches.open('mygame-core-v1').then(function(cache) {
+      // 不稳定文件或大文件加载
+        cache.addAll(
+          //...
+        );
+        // 稳定文件或小文件加载
+        return cache.addAll(
+          // core assets & levels 1-10
+        );
+      })
+    );
+  });
+这样，第一个 cache.addAll 是不会被捕获的，当然，由于异步的存在，这毋庸置疑会有一些问题。比如，当大文件还在加载的时候，SW 断开，那么这次请求就是无效的。不过，你这样写本来就算是一个 trick，这种情况在制定方案的时候，肯定也要考虑进去的。整个步骤，我们可以用下图表示: FROM GOOGLE
+```
