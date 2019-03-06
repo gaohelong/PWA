@@ -1,0 +1,29 @@
+{
+  "name": "pwa",
+  "version": "1.0.0",
+  "description": "pwa example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaohelong/PWA.git"
+  },
+  "keywords": [
+    "pwa"
+  ],
+  "author": "helong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaohelong/PWA/issues"
+  },
+  "homepage": "https://github.com/gaohelong/PWA#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.1.5"
+  }
+}
